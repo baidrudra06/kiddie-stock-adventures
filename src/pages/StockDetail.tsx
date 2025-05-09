@@ -14,6 +14,9 @@ import {
   BadgeDollarSign,
   ArrowUp,
   ArrowDown,
+  AlertTriangle,
+  Percent,
+  DollarSign,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -27,7 +30,7 @@ import { useToast } from "@/components/ui/use-toast";
 const StockDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { buyStock, sellStock, cash, getStockShares } = useGameContext();
+  const { buyStock, sellStock, cash, getStockShares, portfolio } = useGameContext();
   const { toast } = useToast();
   const [stock, setStock] = useState<Stock | null>(null);
   const [shares, setShares] = useState<string>("1");
@@ -57,6 +60,14 @@ const StockDetail = () => {
   const canSell = isValidAmount && parsedShares <= currentShares;
   const isPositive = stock.change >= 0;
   
+  // Get portfolio item for this stock to calculate profit/loss
+  const portfolioItem = portfolio.find(item => item.stockId === stock.id);
+  const currentValue = currentShares * stock.price;
+  const costBasis = portfolioItem ? portfolioItem.averageCost * portfolioItem.shares : 0;
+  const profitLoss = currentValue - costBasis;
+  const profitLossPercentage = costBasis > 0 ? (profitLoss / costBasis) * 100 : 0;
+  const isProfitable = profitLoss > 0;
+  
   const handleBuy = () => {
     if (canBuy && isValidAmount) {
       buyStock(stock.id, parsedShares);
@@ -70,6 +81,20 @@ const StockDetail = () => {
       setShares("1");
     }
   };
+
+  const handleQuickSell = () => {
+    if (currentShares > 0) {
+      sellStock(stock.id, currentShares);
+      
+      // Show profit/loss in toast
+      const totalProfit = profitLoss;
+      toast({
+        title: isProfitable ? "Profit Made!" : "Loss Taken",
+        description: `You sold all ${currentShares} shares for ${isProfitable ? "a profit" : "a loss"} of $${Math.abs(totalProfit).toFixed(2)}`,
+        variant: isProfitable ? "default" : "destructive",
+      });
+    }
+  };
   
   const handleSharesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -77,6 +102,44 @@ const StockDetail = () => {
       setShares(value);
     }
   };
+
+  const getSellAdvice = () => {
+    if (currentShares === 0) return null;
+    
+    if (profitLossPercentage > 15) {
+      return {
+        message: "Consider taking profits! This stock has performed well.",
+        icon: <ArrowUp className="h-4 w-4 text-green-500" />,
+        color: "text-green-600"
+      };
+    } else if (profitLossPercentage > 5) {
+      return {
+        message: "Good gain. You might want to hold or take some profits.",
+        icon: <ArrowUp className="h-4 w-4 text-green-500" />,
+        color: "text-green-600"
+      };
+    } else if (profitLossPercentage < -15) {
+      return {
+        message: "This stock is down significantly. Consider if you should cut losses.",
+        icon: <AlertTriangle className="h-4 w-4 text-red-500" />,
+        color: "text-red-600"
+      };
+    } else if (profitLossPercentage < -5) {
+      return {
+        message: "This stock is down. Monitor closely for further action.",
+        icon: <ArrowDown className="h-4 w-4 text-red-500" />,
+        color: "text-red-600"
+      };
+    }
+    
+    return {
+      message: "This stock is performing within normal range.",
+      icon: null,
+      color: "text-gray-600"
+    };
+  };
+  
+  const sellAdvice = getSellAdvice();
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -119,7 +182,7 @@ const StockDetail = () => {
                 </div>
                 
                 <div className="my-8">
-                  <StockChart stockId={stock.id} color={stock.color} />
+                  <StockChart stockId={stock.id} color={stock.color} animate={true} />
                 </div>
                 
                 <div className="grid sm:grid-cols-2 gap-4 mb-6">
@@ -132,6 +195,54 @@ const StockDetail = () => {
                     <p className="font-medium">{currentShares}</p>
                   </div>
                 </div>
+                
+                {/* Profit/Loss display for owned stocks */}
+                {currentShares > 0 && (
+                  <div className="border rounded-md p-4 mb-6">
+                    <h3 className="text-sm text-gray-500 mb-2">Your Position</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <div className="text-sm text-gray-500">Cost Basis</div>
+                        <div className="font-medium">${costBasis.toFixed(2)}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Current Value</div>
+                        <div className="font-medium">${currentValue.toFixed(2)}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Profit/Loss ($)</div>
+                        <div className={`font-medium flex items-center ${isProfitable ? "text-green-600" : "text-red-600"}`}>
+                          <DollarSign className="h-3 w-3 mr-1" />
+                          {isProfitable ? "+" : "-"}${Math.abs(profitLoss).toFixed(2)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Profit/Loss (%)</div>
+                        <div className={`font-medium flex items-center ${isProfitable ? "text-green-600" : "text-red-600"}`}>
+                          <Percent className="h-3 w-3 mr-1" />
+                          {isProfitable ? "+" : "-"}{Math.abs(profitLossPercentage).toFixed(2)}%
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {sellAdvice && (
+                      <div className={`mt-4 flex items-start gap-2 text-sm ${sellAdvice.color}`}>
+                        {sellAdvice.icon}
+                        <span>{sellAdvice.message}</span>
+                      </div>
+                    )}
+
+                    {currentShares > 0 && (
+                      <Button 
+                        variant={isProfitable ? "default" : "outline"}
+                        className={`mt-4 w-full ${isProfitable ? "bg-green-600 hover:bg-green-700" : ""}`}
+                        onClick={handleQuickSell}
+                      >
+                        Sell All Shares {isProfitable ? "(Take Profit)" : "(Cut Loss)"}
+                      </Button>
+                    )}
+                  </div>
+                )}
                 
                 <div>
                   <h3 className="font-medium mb-2">About {stock.name}</h3>
@@ -223,15 +334,25 @@ const StockDetail = () => {
                           <span>Current Shares</span>
                           <span>{currentShares}</span>
                         </div>
+                        
+                        {currentShares > 0 && (
+                          <div className="flex justify-between text-sm mt-2">
+                            <span>Profit/Loss per Share</span>
+                            <span className={isProfitable ? "text-green-600" : "text-red-600"}>
+                              {isProfitable ? "+" : "-"}${Math.abs(stock.price - (portfolioItem?.averageCost || 0)).toFixed(2)}
+                            </span>
+                          </div>
+                        )}
                       </div>
                       
                       <Button
                         onClick={handleSell}
                         disabled={!canSell}
-                        className="w-full"
-                        variant="secondary"
+                        className={`w-full ${isProfitable ? "bg-green-600 hover:bg-green-700" : ""}`}
+                        variant={isProfitable ? "default" : "secondary"}
                       >
                         Sell {isValidAmount ? parsedShares : 0} {parsedShares === 1 ? "Share" : "Shares"}
+                        {isProfitable ? " (Profit)" : " (Loss)"}
                       </Button>
                     </div>
                   </TabsContent>

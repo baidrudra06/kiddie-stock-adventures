@@ -6,14 +6,17 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import LessonCard from "@/components/LessonCard";
+import TradingGames from "@/components/TradingGames";
 import { useGameContext } from "@/contexts/GameContext";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Search, Book, Video, GameController } from "lucide-react";
 
 const Learn = () => {
   const navigate = useNavigate();
   const { userProgress } = useGameContext();
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
   
   const isLessonCompleted = (lessonId: string): boolean => {
     return userProgress.completedLessons.includes(lessonId);
@@ -21,8 +24,12 @@ const Learn = () => {
   
   const filteredLessons = lessonData.filter(
     lesson => 
-      lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      lesson.description.toLowerCase().includes(searchTerm.toLowerCase())
+      (lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      lesson.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (activeTab === "all" || 
+       (activeTab === "text" && lesson.lessonType === "text") ||
+       (activeTab === "video" && lesson.lessonType === "video") ||
+       (activeTab === "tutorial" && lesson.lessonType === "tutorial"))
   );
   
   return (
@@ -49,21 +56,94 @@ const Learn = () => {
           </div>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredLessons.map(lesson => (
-            <LessonCard 
-              key={lesson.id} 
-              lesson={lesson} 
-              isCompleted={isLessonCompleted(lesson.id)} 
-            />
-          ))}
+        <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList>
+            <TabsTrigger value="all">All Lessons</TabsTrigger>
+            <TabsTrigger value="text" className="flex items-center gap-1">
+              <Book className="w-4 h-4" /> Text
+            </TabsTrigger>
+            <TabsTrigger value="video" className="flex items-center gap-1">
+              <Video className="w-4 h-4" /> Videos
+            </TabsTrigger>
+            <TabsTrigger value="tutorial" className="flex items-center gap-1">
+              <GameController className="w-4 h-4" /> Tutorials
+            </TabsTrigger>
+          </TabsList>
           
-          {filteredLessons.length === 0 && (
-            <div className="col-span-full text-center py-12">
-              <p className="text-xl text-gray-500">No lessons found matching "{searchTerm}"</p>
+          <TabsContent value="all" className="mt-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredLessons.map(lesson => (
+                <LessonCard 
+                  key={lesson.id} 
+                  lesson={lesson} 
+                  isCompleted={isLessonCompleted(lesson.id)} 
+                />
+              ))}
+              
+              {filteredLessons.length === 0 && (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-xl text-gray-500">No lessons found matching "{searchTerm}"</p>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </TabsContent>
+          
+          <TabsContent value="text" className="mt-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredLessons.map(lesson => (
+                <LessonCard 
+                  key={lesson.id} 
+                  lesson={lesson} 
+                  isCompleted={isLessonCompleted(lesson.id)} 
+                />
+              ))}
+              
+              {filteredLessons.length === 0 && (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-xl text-gray-500">No text lessons found matching "{searchTerm}"</p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="video" className="mt-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredLessons.map(lesson => (
+                <LessonCard 
+                  key={lesson.id} 
+                  lesson={lesson} 
+                  isCompleted={isLessonCompleted(lesson.id)} 
+                />
+              ))}
+              
+              {filteredLessons.length === 0 && (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-xl text-gray-500">No video lessons found matching "{searchTerm}"</p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="tutorial" className="mt-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredLessons.map(lesson => (
+                <LessonCard 
+                  key={lesson.id} 
+                  lesson={lesson} 
+                  isCompleted={isLessonCompleted(lesson.id)} 
+                />
+              ))}
+              
+              {filteredLessons.length === 0 && (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-xl text-gray-500">No tutorial lessons found matching "{searchTerm}"</p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
+        
+        <TradingGames />
       </main>
       
       <Footer />

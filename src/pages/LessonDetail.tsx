@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Video } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
@@ -45,6 +45,12 @@ const LessonDetail = () => {
       completeLesson(id);
     }
   };
+
+  const handleWatchComplete = () => {
+    if (id && !isCompleted) {
+      completeLesson(id);
+    }
+  };
   
   if (!lesson) {
     return null; // Loading state
@@ -66,9 +72,19 @@ const LessonDetail = () => {
         </Button>
         
         <div className="flex items-center gap-4 mb-6">
-          <div className="text-5xl animate-float">{lesson.image || "📚"}</div>
+          <div className="text-5xl animate-float">
+            {lesson.lessonType === 'video' || lesson.lessonType === 'tutorial' ? "🎥" : (lesson.image || "📚")}
+          </div>
           <div>
-            <h1 className="text-3xl font-bold">{lesson.title}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-3xl font-bold">{lesson.title}</h1>
+              {lesson.lessonType !== 'text' && (
+                <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+                  <Video className="w-3 h-3 mr-1" />
+                  {lesson.lessonType === 'video' ? 'Video' : 'Tutorial'}
+                </span>
+              )}
+            </div>
             <p className="text-gray-600">{lesson.description}</p>
           </div>
           {isCompleted && (
@@ -80,10 +96,36 @@ const LessonDetail = () => {
         </div>
         
         <Card className="p-6 mb-8">
-          <div 
-            className="prose max-w-none"
-            dangerouslySetInnerHTML={{ __html: lesson.content }}
-          />
+          {/* Video content */}
+          {(lesson.lessonType === 'video' || lesson.lessonType === 'tutorial') && lesson.videoUrl && (
+            <div className="mb-4">
+              <div className="aspect-w-16 aspect-h-9">
+                <iframe 
+                  className="w-full h-full rounded-lg"
+                  src={lesson.videoUrl}
+                  title={lesson.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+              
+              {!isCompleted && (
+                <div className="mt-6 flex justify-center">
+                  <Button onClick={handleWatchComplete}>
+                    Mark as Completed
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* Text content */}
+          {lesson.content && (
+            <div 
+              className="prose max-w-none"
+              dangerouslySetInnerHTML={{ __html: lesson.content }}
+            />
+          )}
         </Card>
         
         {!showQuiz && lesson.quizQuestions && lesson.quizQuestions.length > 0 && (

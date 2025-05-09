@@ -34,6 +34,8 @@ export interface LessonContent {
   image?: string;
   quizQuestions?: QuizQuestion[];
   completed: boolean;
+  videoUrl?: string;
+  lessonType: 'text' | 'video' | 'tutorial';
 }
 
 export interface QuizQuestion {
@@ -75,4 +77,14 @@ export interface StockNews {
   date: string;
   stockId?: string;
   impact: 'positive' | 'negative' | 'neutral';
+}
+
+export interface TradingGame {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  minLevel: number;
+  url: string;
 }
