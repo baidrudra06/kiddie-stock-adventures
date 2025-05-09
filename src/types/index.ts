@@ -49,3 +49,30 @@ export interface UserProgress {
   level: number;
   experience: number;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  photoURL?: string;
+  isAuthenticated: boolean;
+}
+
+export interface AchievementData {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  unlocked: boolean;
+  progress?: number;
+  maxProgress?: number;
+}
+
+export interface StockNews {
+  id: string;
+  title: string;
+  content: string;
+  date: string;
+  stockId?: string;
+  impact: 'positive' | 'negative' | 'neutral';
+}

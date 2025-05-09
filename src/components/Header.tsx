@@ -1,60 +1,83 @@
 
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "react-router-dom";
 import { useGameContext } from "@/contexts/GameContext";
-import { PiggyBank } from "lucide-react";
+import UserAvatar from "./UserAvatar";
 
 const Header = () => {
-  const navigate = useNavigate();
-  const { cash, userProgress } = useGameContext();
-
+  const location = useLocation();
+  const { userProgress } = useGameContext();
+  
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+  
   return (
-    <header className="bg-gradient-to-r from-primary to-accent py-3 text-white shadow-md">
-      <div className="container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-1 bg-white rounded-full shadow-inner">
-            <PiggyBank className="h-8 w-8 text-primary" />
-          </div>
-          <h1 
-            className="text-2xl md:text-3xl font-extrabold cursor-pointer"
-            onClick={() => navigate("/")}
-          >
-            Kiddie Stock Adventures
-          </h1>
-        </div>
-        
-        <div className="flex gap-4 items-center">
-          <div className="flex flex-col items-end">
-            <div className="flex items-center gap-2">
-              <span className="font-bold">💰 ${cash.toFixed(2)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm">🪙 {userProgress.coins} coins</span>
-            </div>
+    <header className="bg-white border-b sticky top-0 z-50">
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Link to="/" className="text-2xl font-bold flex items-center">
+              <span className="mr-2">📈</span>
+              <span className="hidden sm:block">Kiddie Stock Adventures</span>
+              <span className="block sm:hidden">KSA</span>
+            </Link>
           </div>
           
-          <div className="hidden md:flex gap-2">
-            <Button 
-              variant="secondary" 
-              size="sm"
-              onClick={() => navigate("/learn")}
+          <nav className="hidden md:flex items-center space-x-1">
+            <Link
+              to="/"
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                isActive("/")
+                  ? "text-primary bg-primary/10"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              Home
+            </Link>
+            <Link
+              to="/learn"
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                isActive("/learn") || location.pathname.startsWith("/learn/")
+                  ? "text-primary bg-primary/10"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
             >
               Learn
-            </Button>
-            <Button 
-              variant="secondary" 
-              size="sm"
-              onClick={() => navigate("/trade")}
+            </Link>
+            <Link
+              to="/trade"
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                isActive("/trade") || location.pathname.startsWith("/trade/")
+                  ? "text-primary bg-primary/10"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
             >
               Trade
-            </Button>
-            <Button 
-              variant="secondary" 
-              size="sm"
-              onClick={() => navigate("/portfolio")}
+            </Link>
+            <Link
+              to="/portfolio"
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                isActive("/portfolio")
+                  ? "text-primary bg-primary/10"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
             >
               Portfolio
-            </Button>
+            </Link>
+          </nav>
+          
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-full">
+              <span className="text-lg">💰</span>
+              <span className="font-medium">{userProgress.coins}</span>
+            </div>
+            
+            <div className="flex items-center gap-2 bg-yellow-100 px-3 py-1 rounded-full">
+              <span className="text-lg">⭐</span>
+              <span className="font-medium">{userProgress.level}</span>
+            </div>
+            
+            <UserAvatar />
           </div>
         </div>
       </div>

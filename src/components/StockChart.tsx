@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 interface StockChartProps {
   stockId: string;
   color: string;
+  animate?: boolean;
 }
 
 const generateChartData = (stockId: string, days = 30) => {
@@ -31,12 +32,48 @@ const generateChartData = (stockId: string, days = 30) => {
   return data;
 };
 
-const StockChart = ({ stockId, color }: StockChartProps) => {
+// Generate more realistic dynamic movement for stocks
+const updateStockPrices = (data: {date: string; value: number}[]) => {
+  if (!data || data.length === 0) return [];
+  
+  const lastPoint = { ...data[data.length - 1] };
+  const momentum = Math.random() > 0.5 ? 1 : -1;
+  const volatility = 0.5 + Math.random() * 1.5;
+  
+  // Drop first point, add new point
+  const newData = [...data.slice(1)];
+  
+  // Calculate new value based on previous with some randomness
+  let newValue = lastPoint.value + (momentum * Math.random() * volatility);
+  newValue = Math.max(newValue, 1); // Ensure value doesn't go below 1
+  
+  // Add new point with current date
+  newData.push({
+    date: new Date().toISOString().slice(0, 10),
+    value: parseFloat(newValue.toFixed(2))
+  });
+  
+  return newData;
+};
+
+const StockChart = ({ stockId, color, animate = false }: StockChartProps) => {
   const [data, setData] = useState<{ date: string; value: number }[]>([]);
   
   useEffect(() => {
     setData(generateChartData(stockId));
-  }, [stockId]);
+    
+    // If animate is true, update the chart data every few seconds
+    let interval: ReturnType<typeof setInterval>;
+    if (animate) {
+      interval = setInterval(() => {
+        setData(prevData => updateStockPrices(prevData));
+      }, 2000 + Math.random() * 3000); // Random interval between 2-5 seconds
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [stockId, animate]);
   
   const startValue = data[0]?.value || 0;
   const endValue = data[data.length - 1]?.value || 0;
