@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/table";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, LineChart, Line } from "recharts";
 import TransactionTable from "@/components/TransactionTable";
 import { ArrowUp, ArrowDown, TrendingUp } from "lucide-react";
 import PortfolioAchievements from "@/components/PortfolioAchievements";
@@ -169,7 +169,7 @@ const Portfolio = () => {
               <CardContent>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart
+                    <LineChart
                       data={portfolioHistory}
                       margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                     >
@@ -186,13 +186,13 @@ const Portfolio = () => {
                       <Tooltip 
                         formatter={(value) => [`$${Number(value).toFixed(2)}`, "Value"]}
                       />
-                      <Area 
+                      <Line 
                         type="monotone" 
                         dataKey="value"
                         stroke="#8884d8" 
                         fill="#8884d840" 
                       />
-                    </AreaChart>
+                    </LineChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
