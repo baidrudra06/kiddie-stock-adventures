@@ -36,6 +36,8 @@ export interface LessonContent {
   completed: boolean;
   videoUrl?: string;
   lessonType: 'text' | 'video' | 'tutorial';
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  duration?: number; // in minutes
 }
 
 export interface QuizQuestion {
@@ -43,6 +45,7 @@ export interface QuizQuestion {
   question: string;
   options: string[];
   correctAnswer: number;
+  explanation?: string;
 }
 
 export interface UserProgress {
@@ -50,6 +53,7 @@ export interface UserProgress {
   coins: number;
   level: number;
   experience: number;
+  maxLevel?: number; // Maximum level achievable, now supporting 50+
 }
 
 export interface User {

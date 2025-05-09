@@ -18,13 +18,15 @@ interface GameContextType {
   getPortfolioValue: () => number;
   getStockShares: (stockId: string) => number;
   resetGame: () => void;
+  calculateTotalProfitLoss: () => { amount: number; percentage: number };
 }
 
 const defaultUserProgress: UserProgress = {
   completedLessons: [],
   coins: 0,
   level: 1,
-  experience: 0
+  experience: 0,
+  maxLevel: 100 // Allowing for levels up to 100
 };
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -139,6 +141,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       description: `You bought ${shares} shares of ${stock.name}.`,
     });
     
+    // Add experience for trading
+    addExperience(5);
+    
     return true;
   };
   
@@ -165,6 +170,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
     
     const revenue = stock.price * shares;
+    const originalCost = portfolioItem.averageCost * shares;
+    const profit = revenue - originalCost;
     
     // Update cash
     setCash(prev => prev + revenue);
@@ -194,12 +201,60 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       ));
     }
     
-    toast({
-      title: "Stock Sold!",
-      description: `You sold ${shares} shares of ${stock.name} for $${revenue.toFixed(2)}.`,
-    });
+    // Show appropriate message based on profit/loss
+    if (profit > 0) {
+      toast({
+        title: "Stock Sold with Profit!",
+        description: `You sold ${shares} shares of ${stock.name} for a profit of $${profit.toFixed(2)}.`,
+        variant: "default",
+      });
+      
+      // Award extra experience for profitable trades
+      addExperience(10);
+    } else if (profit < 0) {
+      toast({
+        title: "Stock Sold with Loss",
+        description: `You sold ${shares} shares of ${stock.name} for a loss of $${Math.abs(profit).toFixed(2)}.`,
+        variant: "destructive",
+      });
+      
+      // Still award some experience
+      addExperience(3);
+    } else {
+      toast({
+        title: "Stock Sold at Break-Even",
+        description: `You sold ${shares} shares of ${stock.name} for $${revenue.toFixed(2)}.`,
+      });
+      
+      addExperience(5);
+    }
     
     return true;
+  };
+
+  // Calculate total unrealized profit/loss for portfolio
+  const calculateTotalProfitLoss = (): { amount: number; percentage: number } => {
+    let totalCostBasis = 0;
+    let totalCurrentValue = 0;
+    
+    portfolio.forEach(item => {
+      const stock = getStockById(item.stockId);
+      if (stock) {
+        const costBasis = item.averageCost * item.shares;
+        const currentValue = stock.price * item.shares;
+        
+        totalCostBasis += costBasis;
+        totalCurrentValue += currentValue;
+      }
+    });
+    
+    const profitLossAmount = totalCurrentValue - totalCostBasis;
+    const profitLossPercentage = totalCostBasis > 0 ? (profitLossAmount / totalCostBasis) * 100 : 0;
+    
+    return {
+      amount: profitLossAmount,
+      percentage: profitLossPercentage
+    };
   };
 
   const getPortfolioValue = (): number => {
@@ -209,32 +264,59 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }, 0);
   };
 
+  // Helper function to add experience and handle level ups
+  const addExperience = (amount: number) => {
+    const newExperience = userProgress.experience + amount;
+    const currentLevel = userProgress.level;
+    
+    // Experience required for next level increases with level
+    // Level 1 requires 20 XP, Level 2 requires 40 XP, etc.
+    const requiredXP = currentLevel * 20;
+    
+    if (newExperience >= requiredXP) {
+      // Level up!
+      const newLevel = Math.min(currentLevel + 1, userProgress.maxLevel || 100);
+      
+      setUserProgress(prev => ({
+        ...prev,
+        level: newLevel,
+        experience: newExperience - requiredXP
+      }));
+      
+      if (newLevel !== currentLevel) {
+        toast({
+          title: "Level Up!",
+          description: `You've reached level ${newLevel}!`,
+        });
+        
+        // Bonus coins for leveling up
+        awardCoins(newLevel * 25);
+      }
+    } else {
+      setUserProgress(prev => ({
+        ...prev,
+        experience: newExperience
+      }));
+    }
+  };
+
   const completeLesson = (lessonId: string) => {
     if (userProgress.completedLessons.includes(lessonId)) return;
     
     setUserProgress(prev => ({
       ...prev,
       completedLessons: [...prev.completedLessons, lessonId],
-      experience: prev.experience + 10,
-      coins: prev.coins + 50
     }));
     
-    // Level up if enough experience
-    if (userProgress.experience + 10 >= userProgress.level * 20) {
-      setUserProgress(prev => ({
-        ...prev,
-        level: prev.level + 1
-      }));
-      
-      toast({
-        title: "Level Up!",
-        description: `You've reached level ${userProgress.level + 1}!`,
-      });
-    }
+    // Add experience for completing a lesson
+    addExperience(15);
+    
+    // Award coins
+    awardCoins(50);
     
     toast({
       title: "Lesson Complete!",
-      description: "You earned 50 coins and 10 experience points.",
+      description: "You earned 50 coins and 15 experience points.",
     });
   };
 
@@ -274,7 +356,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     awardCoins,
     getPortfolioValue,
     getStockShares,
-    resetGame
+    resetGame,
+    calculateTotalProfitLoss
   };
 
   return (
