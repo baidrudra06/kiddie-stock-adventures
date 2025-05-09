@@ -1,4 +1,3 @@
-
 import { LessonContent } from '../types';
 
 export const lessonData: LessonContent[] = [
@@ -14,6 +13,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '💰',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q1-1',
@@ -52,6 +52,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '📈',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q2-1',
@@ -89,6 +90,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🔄',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q3-1',
@@ -126,6 +128,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🏢',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q4-1',
@@ -163,6 +166,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🏛️',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q5-1',
@@ -200,6 +204,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🌱',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q6-1',
@@ -238,6 +243,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '⚠️',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q7-1',
@@ -276,6 +282,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🧺',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q8-1',
@@ -314,6 +321,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🌳',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q9-1',
@@ -352,6 +360,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '📊',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q10-1',
@@ -390,6 +399,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '📁',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q11-1',
@@ -429,6 +439,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '💵',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q12-1',
@@ -454,7 +465,6 @@ export const lessonData: LessonContent[] = [
       }
     ]
   },
-  // Add more lessons 13-50 below
   {
     id: '13',
     title: 'What are Dividends?',
@@ -468,6 +478,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '💸',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q13-1',
@@ -506,6 +517,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🐂',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q14-1',
@@ -544,6 +556,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '✨',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q15-1',
@@ -582,6 +595,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🔤',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q16-1',
@@ -607,9 +621,6 @@ export const lessonData: LessonContent[] = [
       }
     ]
   },
-  // Adding remaining lessons - these will follow same format
-  /* Content for lessons 17-50 would follow here in the same format */
-  // I'll add a few more representative lessons and then the rest will be summarized for brevity
   {
     id: '17',
     title: 'What are Stock Exchanges?',
@@ -623,6 +634,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🏢',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q17-1',
@@ -661,6 +673,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '📝',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q20-1',
@@ -699,6 +712,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🔄',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q30-1',
@@ -737,6 +751,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '📑',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q40-1',
@@ -777,6 +792,7 @@ export const lessonData: LessonContent[] = [
     `,
     image: '🧠',
     completed: false,
+    lessonType: 'text',
     quizQuestions: [
       {
         id: 'q50-1',
@@ -802,8 +818,50 @@ export const lessonData: LessonContent[] = [
       }
     ]
   },
-  // The remaining lessons 18-19, 21-29, 31-39, 41-49 would follow the same pattern
-  // Lessons about various investing topics like industries, market cap, P/E ratios, etc.
+  {
+    id: 'v1',
+    title: 'Introduction to Stock Market',
+    description: 'A video guide to understanding the stock market basics.',
+    content: '',
+    videoUrl: 'https://www.youtube.com/embed/Xn7KWR9EOGQ',
+    image: '📹',
+    completed: false,
+    lessonType: 'video',
+    quizQuestions: []
+  },
+  {
+    id: 'v2',
+    title: 'How to Read Stock Charts',
+    description: 'Learn to understand stock charts and trends.',
+    content: '',
+    videoUrl: 'https://www.youtube.com/embed/cttEDMJwvw0',
+    image: '📊',
+    completed: false,
+    lessonType: 'video',
+    quizQuestions: []
+  },
+  {
+    id: 't1',
+    title: 'Making Your First Trade',
+    description: 'Step-by-step tutorial on how to make your first stock trade.',
+    content: '',
+    videoUrl: 'https://www.youtube.com/embed/dN3wMJzT22I',
+    image: '🎮',
+    completed: false,
+    lessonType: 'tutorial',
+    quizQuestions: []
+  },
+  {
+    id: 't2',
+    title: 'Building a Balanced Portfolio',
+    description: 'Interactive guide to creating a balanced investment portfolio.',
+    content: '',
+    videoUrl: 'https://www.youtube.com/embed/5gl1NHm3pFM',
+    image: '⚖️',
+    completed: false,
+    lessonType: 'tutorial',
+    quizQuestions: []
+  }
 ];
 
 export const getLessonById = (id: string): LessonContent | undefined => {

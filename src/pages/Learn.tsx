@@ -10,7 +10,7 @@ import TradingGames from "@/components/TradingGames";
 import { useGameContext } from "@/contexts/GameContext";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, Book, Video, GameController } from "lucide-react";
+import { Search, Book, Video, Gamepad } from "lucide-react";
 
 const Learn = () => {
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ const Learn = () => {
               <Video className="w-4 h-4" /> Videos
             </TabsTrigger>
             <TabsTrigger value="tutorial" className="flex items-center gap-1">
-              <GameController className="w-4 h-4" /> Tutorials
+              <Gamepad className="w-4 h-4" /> Tutorials
             </TabsTrigger>
           </TabsList>
           
