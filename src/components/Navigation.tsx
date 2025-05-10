@@ -1,6 +1,6 @@
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, BookOpen, TrendingUp, PieChart } from "lucide-react";
+import { Home, BookOpen, TrendingUp, PieChart, Gamepad } from "lucide-react";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ const Navigation = () => {
     { path: "/learn", label: "Learn", icon: BookOpen },
     { path: "/trade", label: "Trade", icon: TrendingUp },
     { path: "/portfolio", label: "Portfolio", icon: PieChart },
+    { path: "/games", label: "Games", icon: Gamepad },
   ];
 
   const isActive = (path: string) => {

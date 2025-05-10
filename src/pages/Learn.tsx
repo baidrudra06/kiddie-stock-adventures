@@ -6,11 +6,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import LessonCard from "@/components/LessonCard";
-import TradingGames from "@/components/TradingGames";
 import { useGameContext } from "@/contexts/GameContext";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, Book, Video, Gamepad } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Search, Book, Video, Gamepad, ChevronRight } from "lucide-react";
 
 const Learn = () => {
   const navigate = useNavigate();
@@ -54,6 +54,18 @@ const Learn = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+        </div>
+        
+        <div className="mb-6">
+          <Button 
+            onClick={() => navigate('/trading-games')} 
+            variant="outline"
+            className="flex items-center gap-2 border-primary text-primary hover:bg-primary/5"
+          >
+            <Gamepad className="h-5 w-5" />
+            Go to Trading Games
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
         
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
@@ -142,8 +154,6 @@ const Learn = () => {
             </div>
           </TabsContent>
         </Tabs>
-        
-        <TradingGames />
       </main>
       
       <Footer />

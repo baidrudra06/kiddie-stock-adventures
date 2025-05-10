@@ -9,6 +9,7 @@ import Portfolio from "./pages/Portfolio";
 import NotFound from "./pages/NotFound";
 import Parents from "./pages/Parents";
 import Games from "./pages/Games";
+import TradingGames from "./pages/TradingGames";
 import LoginPage from "./components/LoginPage";
 import { AuthProvider } from "./components/AuthProvider";
 import { GameProvider } from "./contexts/GameContext";
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/trade/:id" element={<StockDetail />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/games" element={<Games />} />
+            <Route path="/trading-games" element={<TradingGames />} />
             <Route path="/parents" element={<Parents />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<NotFound />} />
