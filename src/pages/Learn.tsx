@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { lessonData } from "@/data/lessonData";
@@ -6,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import LessonCard from "@/components/LessonCard";
+import KiddieBot from "@/components/KiddieBot";
 import { useGameContext } from "@/contexts/GameContext";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -17,6 +17,7 @@ const Learn = () => {
   const { userProgress } = useGameContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [showKiddieBot, setShowKiddieBot] = useState(false);
   
   const isLessonCompleted = (lessonId: string): boolean => {
     return userProgress.completedLessons.includes(lessonId);
@@ -56,7 +57,7 @@ const Learn = () => {
           </div>
         </div>
         
-        <div className="mb-6">
+        <div className="mb-6 flex flex-col sm:flex-row gap-3">
           <Button 
             onClick={() => navigate('/trading-games')} 
             variant="outline"
@@ -66,7 +67,21 @@ const Learn = () => {
             Go to Trading Games
             <ChevronRight className="h-4 w-4" />
           </Button>
+          
+          <Button
+            onClick={() => setShowKiddieBot(!showKiddieBot)}
+            variant={showKiddieBot ? "secondary" : "default"}
+            className="flex items-center gap-2"
+          >
+            {showKiddieBot ? "Hide Kiddie Bot" : "Talk to Kiddie Bot"}
+          </Button>
         </div>
+        
+        {showKiddieBot && (
+          <div className="mb-8">
+            <KiddieBot onClose={() => setShowKiddieBot(false)} />
+          </div>
+        )}
         
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
           <TabsList>

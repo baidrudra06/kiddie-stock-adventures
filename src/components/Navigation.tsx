@@ -11,6 +11,7 @@ const Navigation = () => {
     { path: "/learn", label: "Learn", icon: BookOpen },
     { path: "/trade", label: "Trade", icon: TrendingUp },
     { path: "/portfolio", label: "Portfolio", icon: PieChart },
+    { path: "/trading-games", label: "Trading Games", icon: Gamepad },
     { path: "/games", label: "Games", icon: Gamepad },
   ];
 
