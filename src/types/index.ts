@@ -92,3 +92,89 @@ export interface TradingGame {
   minLevel: number;
   url: string;
 }
+
+export interface FinancialGame {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  type: 'quiz' | 'simulation' | 'puzzle' | 'story' | 'challenge';
+  minLevel: number;
+  path: string;
+  icon: string;
+  color: string;
+  completed?: boolean;
+}
+
+export interface StockMarketGame {
+  cash: number;
+  portfolio: GameStockItem[];
+  marketTrend: 'up' | 'down' | 'neutral';
+  day: number;
+  maxDays: number;
+  gameCompleted: boolean;
+}
+
+export interface GameStockItem {
+  id: string;
+  name: string;
+  symbol: string;
+  price: number;
+  previousPrice: number;
+  shares: number;
+  category: string;
+}
+
+export interface LemonadeStandGame {
+  day: number;
+  cash: number;
+  inventory: {
+    lemons: number;
+    sugar: number;
+    cups: number;
+  };
+  recipe: {
+    lemons: number;
+    sugar: number;
+    price: number;
+  };
+  weather: 'sunny' | 'cloudy' | 'rainy';
+  customers: number;
+  gameCompleted: boolean;
+}
+
+export interface BudgetChallengeGame {
+  week: number;
+  maxWeeks: number;
+  cash: number;
+  income: number;
+  expenses: BudgetExpense[];
+  savings: number;
+  goal: number;
+  gameCompleted: boolean;
+}
+
+export interface BudgetExpense {
+  id: string;
+  name: string;
+  amount: number;
+  category: 'needs' | 'wants' | 'savings';
+  required: boolean;
+}
+
+export interface FinancialQuizGame {
+  currentQuestion: number;
+  score: number;
+  questions: FinancialQuizQuestion[];
+  gameCompleted: boolean;
+}
+
+export interface FinancialQuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+}
