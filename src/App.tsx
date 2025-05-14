@@ -13,25 +13,28 @@ import TradingGames from "./pages/TradingGames";
 import LoginPage from "./components/LoginPage";
 import { AuthProvider } from "./components/AuthProvider";
 import { GameProvider } from "./contexts/GameContext";
+import { Suspense } from "react";
 
 const App = () => {
   return (
     <Router>
       <AuthProvider>
         <GameProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/learn" element={<Learn />} />
-            <Route path="/learn/:id" element={<LessonDetail />} />
-            <Route path="/trade" element={<Trade />} />
-            <Route path="/trade/:id" element={<StockDetail />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/games" element={<Games />} />
-            <Route path="/trading-games" element={<TradingGames />} />
-            <Route path="/parents" element={<Parents />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center">Loading KiddieTrade...</div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/learn" element={<Learn />} />
+              <Route path="/learn/:id" element={<LessonDetail />} />
+              <Route path="/trade" element={<Trade />} />
+              <Route path="/trade/:id" element={<StockDetail />} />
+              <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/games" element={<Games />} />
+              <Route path="/trading-games" element={<TradingGames />} />
+              <Route path="/parents" element={<Parents />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </GameProvider>
       </AuthProvider>
     </Router>
