@@ -7,7 +7,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-white py-4 shadow-inner mt-auto">
+    <footer className="bg-card/80 text-foreground py-4 shadow-inner mt-auto border-t border-border">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
@@ -19,7 +19,7 @@ const Footer = () => {
           <div className="flex gap-2 justify-center">
             <Button
               variant="link"
-              className="text-white"
+              className="text-foreground"
               size="sm"
               onClick={() => navigate("/")}
             >
@@ -27,7 +27,7 @@ const Footer = () => {
             </Button>
             <Button
               variant="link"
-              className="text-white"
+              className="text-foreground"
               size="sm"
               onClick={() => navigate("/learn")}
             >
@@ -35,7 +35,7 @@ const Footer = () => {
             </Button>
             <Button
               variant="link"
-              className="text-white"
+              className="text-foreground"
               size="sm"
               onClick={() => navigate("/trade")}
             >
@@ -43,7 +43,7 @@ const Footer = () => {
             </Button>
             <Button
               variant="link"
-              className="text-white"
+              className="text-foreground"
               size="sm"
               onClick={() => navigate("/portfolio")}
             >
@@ -56,7 +56,7 @@ const Footer = () => {
           <Button
             variant="outline"
             size="sm"
-            className="text-xs bg-primary hover:bg-primary/90 border-white/20"
+            className="text-xs border-white/20 hover:bg-muted"
             onClick={() => navigate("/parents")}
           >
             Parents Area

@@ -20,7 +20,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg md:hidden z-40">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-lg md:hidden z-40">
       <div className="flex justify-around py-2">
         {navItems.map((item) => (
           <button
@@ -28,8 +28,8 @@ const Navigation = () => {
             onClick={() => navigate(item.path)}
             className={`flex flex-col items-center justify-center p-2 rounded-md transition-colors ${
               isActive(item.path)
-                ? "text-primary bg-primary/10"
-                : "text-gray-500"
+                ? "text-primary bg-primary/20"
+                : "text-muted-foreground"
             }`}
           >
             <item.icon className="h-5 w-5" />
