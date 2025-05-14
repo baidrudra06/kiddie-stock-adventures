@@ -4,33 +4,47 @@ import { useNavigate } from "react-router-dom";
 import { Stock } from "@/types";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { ArrowUp, ArrowDown, Clock } from "lucide-react";
 import StockChart from "./StockChart";
 import { useGameContext } from "@/contexts/GameContext";
 
 interface StockCardProps {
   stock: Stock;
   showActions?: boolean;
+  marketOpen?: boolean;
 }
 
-const StockCard = ({ stock, showActions = true }: StockCardProps) => {
+const StockCard = ({ stock, showActions = true, marketOpen = true }: StockCardProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { buyStock, getStockShares } = useGameContext();
   const [isHovering, setIsHovering] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const shares = getStockShares(stock.id);
   const isPositive = stock.change >= 0;
   
   const handleQuickBuy = () => {
-    const success = buyStock(stock.id, 1);
-    if (success) {
-      toast({
-        title: "Quick Buy Successful!",
-        description: `You bought 1 share of ${stock.ticker} for $${stock.price.toFixed(2)}`,
-      });
-    }
+    setIsProcessing(true);
+    
+    // Simulate processing delay for realism
+    setTimeout(() => {
+      const success = buyStock(stock.id, 1);
+      if (success) {
+        if (marketOpen) {
+          toast({
+            title: "Order Executed",
+            description: `You bought 1 share of ${stock.ticker} for $${stock.price.toFixed(2)}`,
+          });
+        } else {
+          toast({
+            title: "Order Placed",
+            description: `Your order for 1 share of ${stock.ticker} will be executed when the market opens`,
+          });
+        }
+      }
+      setIsProcessing(false);
+    }, 800);
   };
   
   const goToDetails = () => {
@@ -66,14 +80,22 @@ const StockCard = ({ stock, showActions = true }: StockCardProps) => {
         </div>
         
         <div className="my-4">
-          <StockChart stockId={stock.id} color={stock.color} />
+          <StockChart stockId={stock.id} color={stock.color} animate={isHovering} />
         </div>
         
-        {shares > 0 && (
-          <div className="text-sm text-gray-600 mt-2">
-            You own: <span className="font-bold">{shares} shares</span>
-          </div>
-        )}
+        <div className="mt-2 flex justify-between items-center">
+          {shares > 0 && (
+            <div className="text-sm text-gray-600">
+              You own: <span className="font-bold">{shares} shares</span>
+            </div>
+          )}
+          
+          {!marketOpen && (
+            <div className="text-xs text-amber-600 flex items-center ml-auto">
+              <Clock className="h-3 w-3 mr-1" /> Market Closed
+            </div>
+          )}
+        </div>
       </CardContent>
       
       {showActions && (
@@ -89,8 +111,9 @@ const StockCard = ({ stock, showActions = true }: StockCardProps) => {
             onClick={handleQuickBuy} 
             className="flex-1"
             style={{ backgroundColor: stock.color }}
+            disabled={isProcessing}
           >
-            Buy 1
+            {isProcessing ? "Processing..." : "Buy 1"}
           </Button>
         </CardFooter>
       )}

@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowUp, ArrowDown, TrendingUp } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, Clock } from "lucide-react";
 import { Stock, StockNews } from "@/types";
 import { stocksData } from "@/data/stocksData";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
 // Mock stock news data
@@ -56,14 +56,43 @@ const LiveStockUpdates = () => {
   const [liveStocks, setLiveStocks] = useState<Stock[]>(stocksData.slice(0, 5));
   const [activeNews, setActiveNews] = useState<StockNews>(stockNewsItems[0]);
   const [newsIndex, setNewsIndex] = useState(0);
+  const [marketOpen, setMarketOpen] = useState(true);
+  const [marketTime, setMarketTime] = useState(new Date());
+  
+  // Check if market is open (9:30 AM to 4:00 PM EST, Monday-Friday)
+  useEffect(() => {
+    const checkMarketHours = () => {
+      const now = new Date();
+      const day = now.getDay();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      
+      // Simulate market hours (weekdays 9:30 AM to 4 PM)
+      const isWeekday = day >= 1 && day <= 5;
+      const isMarketHours = 
+        (hours > 9 || (hours === 9 && minutes >= 30)) && 
+        hours < 16;
+      
+      setMarketOpen(isWeekday && isMarketHours);
+      setMarketTime(now);
+    };
+    
+    checkMarketHours();
+    const interval = setInterval(checkMarketHours, 60000); // Check every minute
+    
+    return () => clearInterval(interval);
+  }, []);
 
   // Simulate live stock price updates
   useEffect(() => {
     const interval = setInterval(() => {
+      if (!marketOpen) return; // Only update when market is open
+      
       setLiveStocks(prevStocks => 
         prevStocks.map(stock => {
-          // Random price change between -3% and 3%
-          const changePercent = (Math.random() * 6 - 3);
+          // More realistic price movements based on market conditions
+          // Random price change between -1% and 1%
+          const changePercent = (Math.random() * 2 - 1) * (marketOpen ? 1 : 0.2);
           const newPrice = parseFloat((stock.price * (1 + changePercent / 100)).toFixed(2));
           
           return {
@@ -76,7 +105,7 @@ const LiveStockUpdates = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [marketOpen]);
 
   // Rotate through news items
   useEffect(() => {
@@ -113,10 +142,17 @@ const LiveStockUpdates = () => {
   return (
     <div className="grid gap-6">
       <Card className="overflow-hidden">
-        <CardHeader className="bg-primary/5 pb-2">
+        <CardHeader className="bg-primary/5 pb-2 flex flex-row justify-between items-center">
           <CardTitle className="flex items-center text-lg">
             <TrendingUp className="h-5 w-5 mr-2" /> Live Market Updates
           </CardTitle>
+          <div className="flex items-center text-sm">
+            <Clock className="h-4 w-4 mr-1" />
+            <span>{marketTime.toLocaleTimeString()}</span>
+            <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${marketOpen ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}`}>
+              {marketOpen ? 'Market Open' : 'Market Closed'}
+            </span>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <div 
