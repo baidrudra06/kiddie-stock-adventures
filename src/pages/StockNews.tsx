@@ -13,6 +13,9 @@ const StockNews = () => {
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Set document title as a fallback in case Helmet isn't working
+    document.title = "Stock News | KiddieTrade";
   }, []);
 
   return (
