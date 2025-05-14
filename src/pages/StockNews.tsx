@@ -1,5 +1,5 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import StockNewsChannel from "@/components/games/news/StockNewsChannel";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
