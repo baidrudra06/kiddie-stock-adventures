@@ -7,24 +7,18 @@ import Navigation from "@/components/Navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LiveStockUpdates from "@/components/LiveStockUpdates";
 import { Newspaper, BarChart3 } from "lucide-react";
-import { Helmet } from "react-helmet";
 
 const StockNews = () => {
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // Set document title as a fallback in case Helmet isn't working
+    // Set document title
     document.title = "Stock News | KiddieTrade";
   }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <Helmet>
-        <title>Stock News | KiddieTrade</title>
-        <meta name="description" content="Stay updated with the latest stock market news for kids" />
-      </Helmet>
-      
       <Header />
       
       <main className="flex-grow container mx-auto py-8 px-4">
