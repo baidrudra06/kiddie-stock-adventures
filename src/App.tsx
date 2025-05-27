@@ -15,6 +15,7 @@ import LoginPage from "./components/LoginPage";
 import { AuthProvider, useAuth } from "./components/AuthProvider";
 import { GameProvider } from "./contexts/GameContext";
 import { Suspense } from "react";
+import { Toaster } from "sonner";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -98,6 +99,7 @@ const App = () => {
         <GameProvider>
           <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-background">Loading KiddieTrade...</div>}>
             <AppRoutes />
+            <Toaster />
           </Suspense>
         </GameProvider>
       </AuthProvider>
