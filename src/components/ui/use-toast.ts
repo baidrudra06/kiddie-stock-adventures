@@ -6,5 +6,8 @@ export const toast = sonnerToast;
 
 // Create a simple useToast hook that returns the toast function
 export const useToast = () => {
-  return { toast: sonnerToast };
+  return { 
+    toast: sonnerToast,
+    toasts: [] // Add this property to match expected interface
+  };
 };

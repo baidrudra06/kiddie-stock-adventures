@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { StockNews } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,11 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ArrowUp, ArrowDown, Minus, AlertCircle, Calendar, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { generateDailyNews } from "./StockNewsGenerator";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const StockNewsChannel = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [news, setNews] = useState<StockNews[]>([]);
   const [featuredNews, setFeaturedNews] = useState<StockNews | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
@@ -53,14 +51,13 @@ const StockNewsChannel = () => {
       setLastUpdated(currentTime);
       setIsLoading(false);
       
-      toast({
-        title: "News Updated!",
+      toast("News Updated!", {
         description: "The latest financial news has been generated."
       });
     };
     
     loadNews();
-  }, [toast]);
+  }, []);
 
   // Format the date for display
   const formatNewsDate = (dateString: string) => {

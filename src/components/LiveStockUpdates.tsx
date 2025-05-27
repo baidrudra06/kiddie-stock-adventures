@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUp, ArrowDown, TrendingUp, Clock } from "lucide-react";
 import { Stock, StockNews } from "@/types";
 import { stocksData } from "@/data/stocksData";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 // Mock stock news data
@@ -51,7 +50,6 @@ const stockNewsItems: StockNews[] = [
 ];
 
 const LiveStockUpdates = () => {
-  const { toast } = useToast();
   const navigate = useNavigate();
   const [liveStocks, setLiveStocks] = useState<Stock[]>(stocksData.slice(0, 5));
   const [activeNews, setActiveNews] = useState<StockNews>(stockNewsItems[0]);
@@ -125,15 +123,13 @@ const LiveStockUpdates = () => {
     if (news.stockId) {
       const stock = stocksData.find(s => s.id === news.stockId);
       if (stock) {
-        toast({
-          title: news.title,
+        toast(news.title, {
           description: news.content
         });
         navigate(`/trade/${news.stockId}`);
       }
     } else {
-      toast({
-        title: news.title,
+      toast(news.title, {
         description: news.content
       });
     }
