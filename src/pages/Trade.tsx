@@ -1,144 +1,158 @@
 
 import { useState, useEffect } from "react";
-import { stocksData } from "@/data/stocksData";
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import StockCard from "@/components/StockCard";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Search, Clock, AlertCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Search, TrendingUp, AlertCircle } from "lucide-react";
+import { stocksData } from "@/data/stocksData";
+import { Stock } from "@/types";
 
 const Trade = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("name");
+  const [stocks, setStocks] = useState<Stock[]>(stocksData);
   const [marketOpen, setMarketOpen] = useState(true);
-  const [marketTime, setMarketTime] = useState(new Date());
-  
+
+  // Check market hours (simulated for demo)
   useEffect(() => {
-    // Check market hours (simulated as 9:30 AM to 4:00 PM, Monday-Friday)
-    const checkMarketStatus = () => {
+    const checkMarketHours = () => {
       const now = new Date();
       const day = now.getDay();
       const hours = now.getHours();
-      const minutes = now.getMinutes();
       
-      // Weekend check
+      // Market open weekdays 9 AM to 4 PM (simulated)
       const isWeekday = day >= 1 && day <= 5;
-      
-      // Hours check (9:30 AM to 4:00 PM)
-      const isMarketHours = 
-        (hours > 9 || (hours === 9 && minutes >= 30)) && 
-        hours < 16;
+      const isMarketHours = hours >= 9 && hours < 16;
       
       setMarketOpen(isWeekday && isMarketHours);
-      setMarketTime(now);
     };
     
-    checkMarketStatus();
-    const interval = setInterval(checkMarketStatus, 60000); // Check every minute
+    checkMarketHours();
+    const interval = setInterval(checkMarketHours, 60000);
     
     return () => clearInterval(interval);
   }, []);
-  
-  let filteredStocks = stocksData.filter(
-    stock => 
-      stock.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+
+  // Simulate real-time price updates
+  useEffect(() => {
+    if (!marketOpen) return;
+    
+    const interval = setInterval(() => {
+      setStocks(prevStocks => 
+        prevStocks.map(stock => {
+          const changePercent = (Math.random() * 2 - 1) * 0.5; // ±0.5%
+          const newPrice = parseFloat((stock.price * (1 + changePercent / 100)).toFixed(2));
+          
+          return {
+            ...stock,
+            price: newPrice,
+            change: changePercent
+          };
+        })
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [marketOpen]);
+
+  const filteredStocks = stocks.filter(
+    (stock) =>
+      stock.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
-  // Sort stocks
-  filteredStocks = [...filteredStocks].sort((a, b) => {
-    switch (sortBy) {
-      case "name":
-        return a.name.localeCompare(b.name);
-      case "price":
-        return b.price - a.price;
-      case "priceAsc":
-        return a.price - b.price;
-      case "change":
-        return b.change - a.change;
-      default:
-        return a.name.localeCompare(b.name);
-    }
-  });
-  
+
+  const handleStockClick = (stock: Stock) => {
+    navigate(`/trade/${stock.id}`);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header />
       
-      <main className="flex-1 container mx-auto px-4 py-8 pb-20 md:pb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-          <div>
-            <h1 className="text-3xl font-bold">Trade Stocks</h1>
-            <p className="text-gray-600">
-              Buy and sell virtual stocks to grow your portfolio
-            </p>
-          </div>
+      <main className="flex-grow container mx-auto py-8 px-4">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <TrendingUp className="h-8 w-8" />
+            <span>Stock Trading</span>
+          </h1>
           
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-gray-500" />
-            <span className="text-sm">{marketTime.toLocaleTimeString()}</span>
-            <span className={`ml-1 px-2 py-0.5 rounded-full text-xs ${marketOpen ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}`}>
-              {marketOpen ? 'Market Open' : 'Market Closed'}
-            </span>
+          <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+            marketOpen 
+              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' 
+              : 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100'
+          }`}>
+            {marketOpen ? '🟢 Market Open' : '🟡 Market Closed'}
           </div>
         </div>
-        
-        {!marketOpen && (
-          <Alert className="mb-4">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              The market is currently closed. You can place trades, but they will be executed when the market opens (9:30 AM - 4:00 PM ET, Monday-Friday).
-            </AlertDescription>
-          </Alert>
-        )}
-        
-        <div className="flex flex-col sm:flex-row gap-4 w-full mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search stocks..."
-              className="pl-9"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <Select 
-            value={sortBy} 
-            onValueChange={setSortBy}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="name">Name (A-Z)</SelectItem>
-              <SelectItem value="price">Price (High-Low)</SelectItem>
-              <SelectItem value="priceAsc">Price (Low-High)</SelectItem>
-              <SelectItem value="change">Change % (High-Low)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredStocks.map(stock => (
-            <StockCard key={stock.id} stock={stock} showActions={true} marketOpen={marketOpen} />
-          ))}
-          
-          {filteredStocks.length === 0 && (
-            <div className="col-span-full text-center py-12">
-              <p className="text-xl text-gray-500">No stocks found matching "{searchTerm}"</p>
+
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Search className="h-5 w-5" />
+              Find Stocks
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-2">
+              <Input
+                placeholder="Search by company name or ticker..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="flex-1"
+              />
+              <Button variant="outline" size="icon">
+                <Search className="h-4 w-4" />
+              </Button>
             </div>
-          )}
+          </CardContent>
+        </Card>
+
+        {!marketOpen && (
+          <Card className="mb-6 border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-amber-600" />
+                <div>
+                  <p className="font-medium text-amber-800 dark:text-amber-200">
+                    Market is Currently Closed
+                  </p>
+                  <p className="text-sm text-amber-600 dark:text-amber-300">
+                    Trading is available Monday-Friday, 9:00 AM - 4:00 PM. Prices shown are from the last trading session.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {filteredStocks.map((stock) => (
+            <StockCard
+              key={stock.id}
+              stock={stock}
+              onClick={() => handleStockClick(stock)}
+              showActions={true}
+              marketOpen={marketOpen}
+            />
+          ))}
         </div>
+
+        {filteredStocks.length === 0 && (
+          <Card className="mt-6">
+            <CardContent className="pt-6 text-center">
+              <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-lg font-medium mb-2">No stocks found</p>
+              <p className="text-muted-foreground">
+                Try searching with a different company name or ticker symbol.
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </main>
       
       <Footer />

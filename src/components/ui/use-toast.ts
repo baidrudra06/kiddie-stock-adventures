@@ -1,6 +1,10 @@
 
-// Import directly from the hooks directory
-import { useToast, toast } from "@/hooks/use-toast";
+import { toast as sonnerToast } from "sonner";
 
-// Re-export without creating a circular dependency
-export { useToast, toast };
+// Simple re-export to avoid circular dependency
+export const toast = sonnerToast;
+
+// Create a simple useToast hook that returns the toast function
+export const useToast = () => {
+  return { toast: sonnerToast };
+};
