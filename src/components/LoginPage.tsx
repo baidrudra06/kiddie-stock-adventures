@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,7 +28,6 @@ const LoginPage = () => {
     
     if (!email || !password) {
       toast({
-        title: "Login failed",
         description: "Please enter both email and password.",
         variant: "destructive"
       });
@@ -151,7 +149,6 @@ const LoginPage = () => {
           <Button 
             variant="link" 
             onClick={() => toast({
-              title: "Sign up",
               description: "For demo purposes, just click Sign In with Google!"
             })}
             className="text-sm"

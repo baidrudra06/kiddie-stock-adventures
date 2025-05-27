@@ -62,14 +62,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem('ksa-user', JSON.stringify(mockUser));
       
       toast({
-        title: 'Login successful',
         description: `Welcome ${mockUser.name}!`,
       });
       
       navigate('/');
     } catch (error) {
       toast({
-        title: 'Login failed',
         description: 'Please check your credentials and try again.',
         variant: 'destructive',
       });
@@ -94,14 +92,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem('ksa-user', JSON.stringify(mockUser));
       
       toast({
-        title: 'Google login successful',
         description: `Welcome ${mockUser.name}!`,
       });
       
       navigate('/');
     } catch (error) {
       toast({
-        title: 'Google login failed',
         description: 'An error occurred during Google login.',
         variant: 'destructive',
       });
@@ -120,7 +116,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('ksa-progress');
     
     toast({
-      title: 'Logged out',
       description: 'You have been successfully logged out.',
     });
     navigate('/login');
