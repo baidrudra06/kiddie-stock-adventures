@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Stock } from "@/types";
@@ -7,6 +8,8 @@ import { ArrowUp, ArrowDown } from "lucide-react";
 interface StockCardProps {
   stock: Stock;
   onClick: () => void;
+  showActions?: boolean;
+  marketOpen?: boolean;
 }
 
 const StockCard: React.FC<StockCardProps> = ({ stock, onClick }) => {
