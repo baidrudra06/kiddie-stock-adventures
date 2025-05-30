@@ -4,12 +4,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useGameContext } from "@/contexts/GameContext";
-import { GamepadIcon, Brain, Calculator, TrendingUp, ArrowLeft } from "lucide-react";
+import { GamepadIcon, Brain, Calculator, TrendingUp, Building, ArrowLeft } from "lucide-react";
 import MemoryCardGame from "./games/MemoryCardGame";
 import MathQuizGame from "./games/MathQuizGame";
+import BusinessGame from "./games/BusinessGame";
 import StockMarketGameComponent from "./games/stockMarket/StockMarketGame";
 
-type GameType = 'memory' | 'math' | 'stock' | null;
+type GameType = 'memory' | 'math' | 'business' | 'stock' | null;
 
 const TradingGames = () => {
   const { toast } = useToast();
@@ -44,13 +45,22 @@ const TradingGames = () => {
       color: "blue"
     },
     {
+      id: 'business',
+      title: "Business Empire Game",
+      description: "Build your business empire! Buy properties, collect rent, and become the richest player. Like Monopoly but simpler!",
+      icon: <Building className="h-12 w-12 text-green-500" />,
+      difficulty: "Medium",
+      minLevel: 2,
+      color: "green"
+    },
+    {
       id: 'stock',
       title: "Stock Trading Simulator",
       description: "Buy and sell stocks in a realistic market simulation. Learn how trading really works!",
-      icon: <TrendingUp className="h-12 w-12 text-green-500" />,
+      icon: <TrendingUp className="h-12 w-12 text-orange-500" />,
       difficulty: "Hard",
-      minLevel: 2,
-      color: "green"
+      minLevel: 3,
+      color: "orange"
     }
   ];
 
@@ -73,6 +83,8 @@ const TradingGames = () => {
         return <MemoryCardGame onComplete={handleGameComplete} />;
       case 'math':
         return <MathQuizGame onComplete={handleGameComplete} />;
+      case 'business':
+        return <BusinessGame onComplete={handleGameComplete} />;
       case 'stock':
         return <StockMarketGameComponent onComplete={handleGameComplete} />;
       default:
@@ -106,7 +118,7 @@ const TradingGames = () => {
         Play these exciting games to learn about money and trading while having fun! 🎮
       </p>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
         {games.map((game) => (
           <Card 
             key={game.id} 
