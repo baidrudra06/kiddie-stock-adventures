@@ -48,6 +48,7 @@ const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) =
   const [isRolling, setIsRolling] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [winner, setWinner] = useState<'player' | 'ai' | null>(null);
+  const [showPurchaseDialog, setShowPurchaseDialog] = useState<Property | null>(null);
   
   const [players, setPlayers] = useState<Player[]>([
     {
@@ -183,19 +184,10 @@ const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) =
     const player = getCurrentPlayer();
     
     if (player.money >= property.price) {
+      setShowPurchaseDialog(property);
       toast({
         title: `Buy ${property.name}?`,
         description: `Price: $${property.price}, Rent: $${property.rent}`,
-        action: (
-          <div className="flex gap-2">
-            <Button size="sm" onClick={() => buyProperty(property.id)}>
-              Buy
-            </Button>
-            <Button size="sm" variant="outline" onClick={switchTurn}>
-              Skip
-            </Button>
-          </div>
-        ),
       });
     } else {
       toast({
@@ -232,6 +224,12 @@ const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) =
       description: `You bought ${property.name} for $${property.price}`,
     });
 
+    setShowPurchaseDialog(null);
+    switchTurn();
+  };
+
+  const skipPurchase = () => {
+    setShowPurchaseDialog(null);
     switchTurn();
   };
 
@@ -289,6 +287,7 @@ const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) =
     setGameWon(false);
     setWinner(null);
     setDiceValue(1);
+    setShowPurchaseDialog(null);
   };
 
   const DiceIcon = diceIcons[diceValue - 1];
@@ -346,6 +345,31 @@ const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) =
         ))}
       </div>
 
+      {/* Purchase Dialog */}
+      {showPurchaseDialog && (
+        <Card className="glass-effect border-2 border-primary">
+          <CardHeader>
+            <CardTitle className="text-center">Purchase Property?</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center space-y-4">
+            <div>
+              <h3 className="font-bold text-lg">{showPurchaseDialog.name}</h3>
+              <p className="text-sm text-muted-foreground">
+                Price: ${showPurchaseDialog.price} | Rent: ${showPurchaseDialog.rent}
+              </p>
+            </div>
+            <div className="flex gap-4 justify-center">
+              <Button onClick={() => buyProperty(showPurchaseDialog.id)}>
+                Buy Property
+              </Button>
+              <Button variant="outline" onClick={skipPurchase}>
+                Skip
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Game Board */}
       <Card className="glass-effect">
         <CardContent className="p-6">
@@ -397,7 +421,7 @@ const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) =
               </div>
             </div>
             
-            {currentPlayer === 'player' && (
+            {currentPlayer === 'player' && !showPurchaseDialog && (
               <Button
                 onClick={rollDice}
                 disabled={isRolling}
