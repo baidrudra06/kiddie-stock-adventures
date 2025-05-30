@@ -1,6 +1,5 @@
-
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, PresentationControls, Environment, Float, ContactShadows, Sparkles, Stars } from '@react-three/drei';
+import { OrbitControls, PresentationControls, Environment, Float, ContactShadows, Sparkles, Stars, useGLTF } from '@react-three/drei';
 import { Suspense, useState, useRef, useEffect } from 'react';
 import { Color, MathUtils } from 'three';
 
