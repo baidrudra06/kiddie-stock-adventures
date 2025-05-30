@@ -1,9 +1,12 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Building, Coins, User, Bot } from 'lucide-react';
+import { Building } from 'lucide-react';
+import PlayerInfo from './business/PlayerInfo';
+import PurchaseDialog from './business/PurchaseDialog';
+import GameBoard from './business/GameBoard';
+import DiceControls from './business/DiceControls';
 
 interface Property {
   id: number;
@@ -37,8 +40,6 @@ const properties: Property[] = [
   { id: 10, name: "Movie Theater", price: 200, rent: 45, owner: null, color: "bg-indigo-200" },
   { id: 11, name: "Mall", price: 250, rent: 60, owner: null, color: "bg-pink-200" }
 ];
-
-const diceIcons = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
 
 const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) => {
   const { toast } = useToast();
@@ -290,8 +291,6 @@ const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) =
     setShowPurchaseDialog(null);
   };
 
-  const DiceIcon = diceIcons[diceValue - 1];
-
   if (gameWon) {
     return (
       <div className="text-center space-y-6 p-8">
@@ -323,120 +322,23 @@ const BusinessGame = ({ onComplete }: { onComplete: (coins: number) => void }) =
         </Button>
       </div>
 
-      {/* Player Info */}
-      <div className="grid grid-cols-2 gap-4">
-        {players.map((player) => (
-          <Card key={player.id} className={`glass-effect ${currentPlayer === player.id ? 'ring-2 ring-primary' : ''}`}>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                {player.id === 'player' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-                <span className="font-bold">{player.name}</span>
-                {currentPlayer === player.id && <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">Current</span>}
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Coins className="h-4 w-4 text-yellow-500" />
-                <span>${player.money}</span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                Properties: {player.properties.length}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <PlayerInfo players={players} currentPlayer={currentPlayer} />
+      
+      <PurchaseDialog 
+        property={showPurchaseDialog}
+        onBuy={buyProperty}
+        onSkip={skipPurchase}
+      />
 
-      {/* Purchase Dialog */}
-      {showPurchaseDialog && (
-        <Card className="glass-effect border-2 border-primary">
-          <CardHeader>
-            <CardTitle className="text-center">Purchase Property?</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <div>
-              <h3 className="font-bold text-lg">{showPurchaseDialog.name}</h3>
-              <p className="text-sm text-muted-foreground">
-                Price: ${showPurchaseDialog.price} | Rent: ${showPurchaseDialog.rent}
-              </p>
-            </div>
-            <div className="flex gap-4 justify-center">
-              <Button onClick={() => buyProperty(showPurchaseDialog.id)}>
-                Buy Property
-              </Button>
-              <Button variant="outline" onClick={skipPurchase}>
-                Skip
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <GameBoard gameBoard={gameBoard} players={players} />
 
-      {/* Game Board */}
-      <Card className="glass-effect">
-        <CardContent className="p-6">
-          <div className="grid grid-cols-4 gap-2 mb-6">
-            {gameBoard.map((property, index) => {
-              const playersHere = players.filter(p => p.position === index);
-              
-              return (
-                <div
-                  key={property.id}
-                  className={`${property.color} p-2 rounded-lg text-center text-xs relative min-h-16 flex flex-col justify-between border-2 ${
-                    property.owner === 'player' ? 'border-blue-500' : 
-                    property.owner === 'ai' ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                >
-                  <div className="font-bold">{property.name}</div>
-                  {property.price > 0 && (
-                    <div className="text-xs">
-                      <div>${property.price}</div>
-                      <div>Rent: ${property.rent}</div>
-                    </div>
-                  )}
-                  
-                  {/* Player indicators */}
-                  {playersHere.length > 0 && (
-                    <div className="absolute -top-2 -right-2 flex gap-1">
-                      {playersHere.map((player) => (
-                        <div
-                          key={player.id}
-                          className={`w-4 h-4 rounded-full ${player.color} border-2 border-white`}
-                          title={player.name}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Dice and Controls */}
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center gap-4">
-              <div className="text-lg font-bold">
-                {currentPlayer === 'player' ? 'Your Turn' : "Computer's Turn"}
-              </div>
-              <div className={`p-3 rounded-lg bg-white shadow-md ${isRolling ? 'animate-spin' : ''}`}>
-                <DiceIcon className="h-8 w-8" />
-              </div>
-            </div>
-            
-            {currentPlayer === 'player' && !showPurchaseDialog && (
-              <Button
-                onClick={rollDice}
-                disabled={isRolling}
-                className="animate-glow-pulse"
-              >
-                {isRolling ? 'Rolling...' : 'Roll Dice'}
-              </Button>
-            )}
-            
-            {currentPlayer === 'ai' && (
-              <div className="text-muted-foreground">Computer is thinking...</div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+      <DiceControls 
+        currentPlayer={currentPlayer}
+        diceValue={diceValue}
+        isRolling={isRolling}
+        showPurchaseDialog={!!showPurchaseDialog}
+        onRollDice={rollDice}
+      />
 
       <div className="text-center text-sm text-muted-foreground">
         🎯 Goal: Buy properties and collect rent to bankrupt your opponent!
