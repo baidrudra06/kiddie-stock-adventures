@@ -50,55 +50,131 @@
     color: rgba(255, 255, 255, 0.98);
   }
 
-  /* Smart contrast text colors */
-  .bg-white, .bg-gray-50, .bg-gray-100, .bg-gray-200, .bg-primary {
-    color: rgba(0, 0, 0, 0.87) !important;
+  /* Enhanced text contrast for better readability */
+  .bg-white, .bg-gray-50, .bg-gray-100, .bg-gray-200, .bg-yellow-50, .bg-amber-50 {
+    color: rgba(0, 0, 0, 0.9) !important;
   }
 
-  .bg-white *, .bg-gray-50 *, .bg-gray-100 *, .bg-gray-200 *, .bg-primary * {
-    color: rgba(0, 0, 0, 0.87) !important;
+  .bg-white *, .bg-gray-50 *, .bg-gray-100 *, .bg-gray-200 *, .bg-yellow-50 *, .bg-amber-50 * {
+    color: rgba(0, 0, 0, 0.9) !important;
   }
 
   /* Dark backgrounds get white text */
-  .bg-black, .bg-gray-800, .bg-gray-900, .bg-background, .bg-card {
-    color: rgba(255, 255, 255, 0.95) !important;
+  .bg-black, .bg-gray-800, .bg-gray-900, .bg-background, .bg-card, .bg-slate-900 {
+    color: rgba(255, 255, 255, 0.98) !important;
   }
 
-  .bg-black *, .bg-gray-800 *, .bg-gray-900 *, .bg-background *, .bg-card * {
-    color: rgba(255, 255, 255, 0.95) !important;
+  .bg-black *, .bg-gray-800 *, .bg-gray-900 *, .bg-background *, .bg-card *, .bg-slate-900 * {
+    color: rgba(255, 255, 255, 0.98) !important;
   }
 
-  /* Button contrast */
-  .bg-primary button, .bg-white button {
-    color: rgba(0, 0, 0, 0.87) !important;
+  /* Primary color backgrounds */
+  .bg-primary {
+    color: rgba(0, 0, 0, 0.9) !important;
   }
 
-  .bg-secondary button, .bg-dark button {
-    color: rgba(255, 255, 255, 0.95) !important;
+  .bg-primary * {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  /* Secondary backgrounds */
+  .bg-secondary {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  .bg-secondary * {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  /* Button contrast improvements */
+  .bg-primary button, .bg-white button, .bg-gray-50 button, .bg-gray-100 button {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  .bg-background button, .bg-card button, .bg-dark button {
+    color: rgba(255, 255, 255, 0.98) !important;
   }
 
   /* Input field contrast */
-  .bg-white input, .bg-gray-50 input, .bg-gray-100 input {
-    color: rgba(0, 0, 0, 0.87) !important;
+  .bg-white input, .bg-gray-50 input, .bg-gray-100 input, .bg-primary input {
+    color: rgba(0, 0, 0, 0.9) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
   }
 
-  /* Card contrast based on background */
+  .bg-background input, .bg-card input, .bg-dark input {
+    color: rgba(255, 255, 255, 0.98) !important;
+    background-color: rgba(40, 40, 40, 0.9) !important;
+  }
+
+  /* Card improvements */
   .card {
-    background: rgba(20, 20, 20, 0.9);
-    color: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(20, 20, 20, 0.95);
+    color: rgba(255, 255, 255, 0.98) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .card * {
-    color: rgba(255, 255, 255, 0.95) !important;
+    color: rgba(255, 255, 255, 0.98) !important;
   }
 
-  /* Override for light cards */
-  .card.bg-white, .card.bg-gray-50 {
-    color: rgba(0, 0, 0, 0.87) !important;
+  /* Light card overrides */
+  .card.bg-white, .card.bg-gray-50, .card.bg-gray-100 {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: rgba(0, 0, 0, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 
-  .card.bg-white *, .card.bg-gray-50 * {
-    color: rgba(0, 0, 0, 0.87) !important;
+  .card.bg-white *, .card.bg-gray-50 *, .card.bg-gray-100 * {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  /* Text color classes for specific cases */
+  .text-muted-foreground {
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
+
+  .text-gray-600, .text-gray-500, .text-gray-400 {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .text-gray-300, .text-gray-200 {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  /* Ensure green and red text is visible */
+  .text-green-600, .text-green-500 {
+    color: rgb(34, 197, 94) !important;
+  }
+
+  .text-red-600, .text-red-500 {
+    color: rgb(239, 68, 68) !important;
+  }
+
+  /* Alert and warning backgrounds */
+  .bg-amber-100, .bg-amber-50 {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  .bg-amber-100 *, .bg-amber-50 * {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  .bg-green-100, .bg-green-50 {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  .bg-green-100 *, .bg-green-50 * {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  /* Specific overrides for stock card and trading components */
+  .stock-card, .trading-panel {
+    background: rgba(20, 20, 20, 0.95) !important;
+    color: rgba(255, 255, 255, 0.98) !important;
+  }
+
+  .stock-card *, .trading-panel * {
+    color: rgba(255, 255, 255, 0.98) !important;
   }
 
   body::before {
