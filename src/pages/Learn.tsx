@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Book, Video, Gamepad, ChevronRight, BookOpen, Star } from "lucide-react";
+import { Search, Book, Video, Gamepad, ChevronRight, BookOpen, Star, ExternalLink } from "lucide-react";
 
 const stockMarketBooks = [
   {
@@ -24,7 +24,8 @@ const stockMarketBooks = [
     ageGroup: "12+",
     difficulty: "Beginner",
     pageCount: 640,
-    summary: "Learn the timeless principles of value investing from the mentor of Warren Buffett."
+    summary: "Learn the timeless principles of value investing from the mentor of Warren Buffett.",
+    readingUrl: "https://www.goodreads.com/book/show/106835.The_Intelligent_Investor"
   },
   {
     id: "book2",
@@ -35,7 +36,8 @@ const stockMarketBooks = [
     ageGroup: "10+",
     difficulty: "Beginner",
     pageCount: 448,
-    summary: "Discover why diversified index funds often beat actively managed portfolios."
+    summary: "Discover why diversified index funds often beat actively managed portfolios.",
+    readingUrl: "https://www.goodreads.com/book/show/40242274-a-random-walk-down-wall-street"
   },
   {
     id: "book3",
@@ -46,7 +48,8 @@ const stockMarketBooks = [
     ageGroup: "8+",
     difficulty: "Beginner",
     pageCount: 304,
-    summary: "Learn why low-cost index funds are the best choice for most investors."
+    summary: "Learn why low-cost index funds are the best choice for most investors.",
+    readingUrl: "https://www.goodreads.com/book/show/171127.The_Little_Book_of_Common_Sense_Investing"
   },
   {
     id: "book4",
@@ -57,7 +60,8 @@ const stockMarketBooks = [
     ageGroup: "12+",
     difficulty: "Intermediate",
     pageCount: 352,
-    summary: "Discover how to find winning stocks by looking at the world around you."
+    summary: "Discover how to find winning stocks by looking at the world around you.",
+    readingUrl: "https://www.goodreads.com/book/show/762462.One_Up_On_Wall_Street"
   },
   {
     id: "book5",
@@ -68,7 +72,8 @@ const stockMarketBooks = [
     ageGroup: "10+",
     difficulty: "Beginner",
     pageCount: 272,
-    summary: "Understand the real habits and characteristics of wealthy individuals."
+    summary: "Understand the real habits and characteristics of wealthy individuals.",
+    readingUrl: "https://www.goodreads.com/book/show/998.The_Millionaire_Next_Door"
   },
   {
     id: "book6",
@@ -79,7 +84,8 @@ const stockMarketBooks = [
     ageGroup: "8+",
     difficulty: "Beginner",
     pageCount: 336,
-    summary: "Learn the importance of financial literacy and building assets."
+    summary: "Learn the importance of financial literacy and building assets.",
+    readingUrl: "https://www.goodreads.com/book/show/69571.Rich_Dad_Poor_Dad"
   }
 ];
 
@@ -119,6 +125,10 @@ const Learn = () => {
       />
     ));
   };
+
+  const handleReadBook = (book: typeof stockMarketBooks[0]) => {
+    window.open(book.readingUrl, '_blank', 'noopener,noreferrer');
+  };
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -127,8 +137,8 @@ const Learn = () => {
       <main className="flex-1 container mx-auto px-4 py-8 pb-20 md:pb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Learn About Money & Stocks</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold text-white">Learn About Money & Stocks</h1>
+            <p className="text-gray-300">
               Complete fun lessons to earn coins and build your knowledge
             </p>
           </div>
@@ -199,7 +209,7 @@ const Learn = () => {
               
               {filteredLessons.length === 0 && (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-xl text-gray-500">No lessons found matching "{searchTerm}"</p>
+                  <p className="text-xl text-gray-300">No lessons found matching "{searchTerm}"</p>
                 </div>
               )}
             </div>
@@ -217,7 +227,7 @@ const Learn = () => {
               
               {filteredLessons.length === 0 && (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-xl text-gray-500">No text lessons found matching "{searchTerm}"</p>
+                  <p className="text-xl text-gray-300">No text lessons found matching "{searchTerm}"</p>
                 </div>
               )}
             </div>
@@ -235,7 +245,7 @@ const Learn = () => {
               
               {filteredLessons.length === 0 && (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-xl text-gray-500">No video lessons found matching "{searchTerm}"</p>
+                  <p className="text-xl text-gray-300">No video lessons found matching "{searchTerm}"</p>
                 </div>
               )}
             </div>
@@ -253,7 +263,7 @@ const Learn = () => {
               
               {filteredLessons.length === 0 && (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-xl text-gray-500">No tutorial lessons found matching "{searchTerm}"</p>
+                  <p className="text-xl text-gray-300">No tutorial lessons found matching "{searchTerm}"</p>
                 </div>
               )}
             </div>
@@ -262,11 +272,11 @@ const Learn = () => {
           <TabsContent value="books" className="mt-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredBooks.map(book => (
-                <Card key={book.id} className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-primary/50">
+                <Card key={book.id} className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-primary/50 bg-card">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-lg mb-2">{book.title}</CardTitle>
+                        <CardTitle className="text-lg mb-2 text-white">{book.title}</CardTitle>
                         <CardDescription className="text-sm font-medium text-primary">
                           by {book.author}
                         </CardDescription>
@@ -275,34 +285,38 @@ const Learn = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-gray-600 mb-4">{book.description}</p>
+                    <p className="text-sm text-gray-300 mb-4">{book.description}</p>
                     
                     <div className="flex items-center gap-1 mb-3">
                       {renderStars(book.rating)}
-                      <span className="text-sm text-gray-500 ml-1">({book.rating}/5)</span>
+                      <span className="text-sm text-gray-400 ml-1">({book.rating}/5)</span>
                     </div>
                     
-                    <div className="space-y-2 text-xs text-gray-500">
+                    <div className="space-y-2 text-xs text-gray-400">
                       <div className="flex justify-between">
                         <span>Age Group:</span>
-                        <span className="font-medium">{book.ageGroup}</span>
+                        <span className="font-medium text-gray-300">{book.ageGroup}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Difficulty:</span>
-                        <span className="font-medium">{book.difficulty}</span>
+                        <span className="font-medium text-gray-300">{book.difficulty}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Pages:</span>
-                        <span className="font-medium">{book.pageCount}</span>
+                        <span className="font-medium text-gray-300">{book.pageCount}</span>
                       </div>
                     </div>
                     
-                    <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                      <p className="text-xs text-blue-800 italic">{book.summary}</p>
+                    <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                      <p className="text-xs text-primary-foreground italic">{book.summary}</p>
                     </div>
                     
-                    <Button className="w-full mt-4" size="sm">
-                      <BookOpen className="w-4 h-4 mr-2" />
+                    <Button 
+                      className="w-full mt-4" 
+                      size="sm"
+                      onClick={() => handleReadBook(book)}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
                       Read Book
                     </Button>
                   </CardContent>
@@ -311,7 +325,7 @@ const Learn = () => {
               
               {filteredBooks.length === 0 && (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-xl text-gray-500">No books found matching "{searchTerm}"</p>
+                  <p className="text-xl text-gray-300">No books found matching "{searchTerm}"</p>
                 </div>
               )}
             </div>
