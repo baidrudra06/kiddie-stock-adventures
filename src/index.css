@@ -50,45 +50,55 @@
     color: rgba(255, 255, 255, 0.98);
   }
 
-  /* Force white text for all elements */
-  h1, h2, h3, h4, h5, h6, p, span, div, label, button {
+  /* Smart contrast text colors */
+  .bg-white, .bg-gray-50, .bg-gray-100, .bg-gray-200, .bg-primary {
+    color: rgba(0, 0, 0, 0.87) !important;
+  }
+
+  .bg-white *, .bg-gray-50 *, .bg-gray-100 *, .bg-gray-200 *, .bg-primary * {
+    color: rgba(0, 0, 0, 0.87) !important;
+  }
+
+  /* Dark backgrounds get white text */
+  .bg-black, .bg-gray-800, .bg-gray-900, .bg-background, .bg-card {
     color: rgba(255, 255, 255, 0.95) !important;
   }
 
-  /* Specific overrides for better contrast */
-  .text-gray-700, .text-gray-800, .text-gray-900 {
+  .bg-black *, .bg-gray-800 *, .bg-gray-900 *, .bg-background *, .bg-card * {
     color: rgba(255, 255, 255, 0.95) !important;
   }
 
-  .text-gray-600 {
-    color: rgba(255, 255, 255, 0.85) !important;
+  /* Button contrast */
+  .bg-primary button, .bg-white button {
+    color: rgba(0, 0, 0, 0.87) !important;
   }
 
-  .text-gray-500 {
-    color: rgba(255, 255, 255, 0.75) !important;
-  }
-
-  .text-gray-400 {
-    color: rgba(255, 255, 255, 0.65) !important;
-  }
-
-  .text-gray-300 {
-    color: rgba(255, 255, 255, 0.85) !important;
-  }
-
-  /* Card text improvements */
-  .card, .card * {
+  .bg-secondary button, .bg-dark button {
     color: rgba(255, 255, 255, 0.95) !important;
   }
 
-  /* Button text */
-  button, .button {
+  /* Input field contrast */
+  .bg-white input, .bg-gray-50 input, .bg-gray-100 input {
+    color: rgba(0, 0, 0, 0.87) !important;
+  }
+
+  /* Card contrast based on background */
+  .card {
+    background: rgba(20, 20, 20, 0.9);
     color: rgba(255, 255, 255, 0.95) !important;
   }
 
-  /* Input text */
-  input, textarea, select {
+  .card * {
     color: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  /* Override for light cards */
+  .card.bg-white, .card.bg-gray-50 {
+    color: rgba(0, 0, 0, 0.87) !important;
+  }
+
+  .card.bg-white *, .card.bg-gray-50 * {
+    color: rgba(0, 0, 0, 0.87) !important;
   }
 
   body::before {
