@@ -1,7 +1,6 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Target, Coins, TrendingUp, Building, Users } from 'lucide-react';
+import { BookOpen, Target, Coins, TrendingUp, Building, Users, AlertTriangle } from 'lucide-react';
 
 interface GameRulesProps {
   onClose: () => void;
