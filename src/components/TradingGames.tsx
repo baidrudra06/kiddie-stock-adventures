@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,8 +8,9 @@ import MemoryCardGame from "./games/MemoryCardGame";
 import MathQuizGame from "./games/MathQuizGame";
 import BusinessGame from "./games/BusinessGame";
 import StockMarketGameComponent from "./games/stockMarket/StockMarketGame";
+import BusinessMonopoly from "./games/business/BusinessMonopoly";
 
-type GameType = 'memory' | 'math' | 'business' | 'stock' | null;
+type GameType = 'memory' | 'math' | 'business' | 'stock' | 'monopoly' | null;
 
 const TradingGames = () => {
   const { toast } = useToast();
@@ -54,6 +54,15 @@ const TradingGames = () => {
       color: "green"
     },
     {
+      id: 'monopoly',
+      title: "Business Monopoly",
+      description: "Complete business-themed Monopoly with 40 spaces, event cards, and strategic gameplay! Build your business empire through smart investments.",
+      icon: <Building className="h-12 w-12 text-emerald-500" />,
+      difficulty: "Hard",
+      minLevel: 1,
+      color: "emerald"
+    },
+    {
       id: 'stock',
       title: "Stock Trading Simulator",
       description: "Buy and sell stocks in a realistic market simulation. Learn how trading really works!",
@@ -85,6 +94,8 @@ const TradingGames = () => {
         return <MathQuizGame onComplete={handleGameComplete} />;
       case 'business':
         return <BusinessGame onComplete={handleGameComplete} />;
+      case 'monopoly':
+        return <BusinessMonopoly onComplete={handleGameComplete} />;
       case 'stock':
         return <StockMarketGameComponent onComplete={handleGameComplete} />;
       default:
