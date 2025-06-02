@@ -50,7 +50,7 @@ const TradingGames = () => {
       description: "Build your business empire! Buy properties, collect rent, and become the richest player. Like Monopoly but simpler!",
       icon: <Building className="h-12 w-12 text-green-500" />,
       difficulty: "Medium",
-      minLevel: 2,
+      minLevel: 1,
       color: "green"
     },
     {
@@ -137,9 +137,11 @@ const TradingGames = () => {
                 <span className={`text-xs font-medium px-3 py-1 rounded-full ${getDifficultyColor(game.difficulty)}`}>
                   {game.difficulty}
                 </span>
-                <span className="text-sm text-gray-500">
-                  Level {game.minLevel}+
-                </span>
+                {game.id !== 'business' && (
+                  <span className="text-sm text-gray-500">
+                    Level {game.minLevel}+
+                  </span>
+                )}
               </div>
             </CardContent>
             
@@ -147,12 +149,12 @@ const TradingGames = () => {
               <Button 
                 onClick={() => setActiveGame(game.id as GameType)}
                 className="w-full hover-lift transition-all duration-300 animate-glow-pulse"
-                disabled={userProgress.level < game.minLevel}
+                disabled={game.id !== 'business' && userProgress.level < game.minLevel}
                 style={{ 
-                  backgroundColor: userProgress.level >= game.minLevel ? `var(--${game.color}-500)` : undefined
+                  backgroundColor: (game.id === 'business' || userProgress.level >= game.minLevel) ? `var(--${game.color}-500)` : undefined
                 }}
               >
-                {userProgress.level >= game.minLevel ? "Play Now! 🎮" : `Need Level ${game.minLevel}`}
+                {(game.id === 'business' || userProgress.level >= game.minLevel) ? "Play Now! 🎮" : `Need Level ${game.minLevel}`}
               </Button>
             </CardFooter>
           </Card>
