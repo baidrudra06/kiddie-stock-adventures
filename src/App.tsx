@@ -11,6 +11,7 @@ import Parents from "./pages/Parents";
 import Games from "./pages/Games";
 import TradingGames from "./pages/TradingGames";
 import StockNews from "./pages/StockNews";
+import AIChat from "./pages/AIChat";
 import LoginPage from "./components/LoginPage";
 import { AuthProvider, useAuth } from "./components/AuthProvider";
 import { GameProvider } from "./contexts/GameContext";
@@ -75,6 +76,11 @@ const AppRoutes = () => {
       <Route path="/trading-games" element={
         <ProtectedRoute>
           <TradingGames />
+        </ProtectedRoute>
+      } />
+      <Route path="/ai-chat" element={
+        <ProtectedRoute>
+          <AIChat />
         </ProtectedRoute>
       } />
       <Route path="/parents" element={
