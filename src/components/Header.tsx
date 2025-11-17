@@ -1,9 +1,13 @@
 
 import { NavLink } from "react-router-dom";
-import { Bot, Users } from "lucide-react";
+import { Bot, Users, Trophy, Award, LogOut } from "lucide-react";
 import UserAvatar from "./UserAvatar";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "./ui/button";
 
 const Header = () => {
+  const { signOut } = useAuth();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -48,6 +52,28 @@ const Header = () => {
             Games
           </NavLink>
           <NavLink 
+            to="/leaderboard" 
+            className={({ isActive }) => 
+              `text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 ${
+                isActive ? 'text-primary' : 'text-muted-foreground'
+              }`
+            }
+          >
+            <Trophy className="w-4 h-4" />
+            Leaderboard
+          </NavLink>
+          <NavLink 
+            to="/achievements" 
+            className={({ isActive }) => 
+              `text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 ${
+                isActive ? 'text-primary' : 'text-muted-foreground'
+              }`
+            }
+          >
+            <Award className="w-4 h-4" />
+            Achievements
+          </NavLink>
+          <NavLink 
             to="/ai-chat" 
             className={({ isActive }) => 
               `text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 ${
@@ -58,30 +84,20 @@ const Header = () => {
             <Bot className="w-4 h-4" />
             AI Chat
           </NavLink>
-          <NavLink 
-            to="/portfolio" 
-            className={({ isActive }) => 
-              `text-sm font-medium transition-colors hover:text-primary ${
-                isActive ? 'text-primary' : 'text-muted-foreground'
-              }`
-            }
-          >
-            Portfolio
-          </NavLink>
-          <NavLink 
-            to="/parents" 
-            className={({ isActive }) => 
-              `text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 ${
-                isActive ? 'text-primary' : 'text-muted-foreground'
-              }`
-            }
-          >
-            <Users className="w-4 h-4" />
-            Parents
-          </NavLink>
         </nav>
 
-        <UserAvatar />
+        <div className="flex items-center gap-2">
+          <UserAvatar />
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={signOut}
+            className="hidden md:flex items-center gap-1"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </Button>
+        </div>
       </div>
     </header>
   );

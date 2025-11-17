@@ -1,6 +1,6 @@
 
 import { NavLink } from "react-router-dom";
-import { Home, BookOpen, TrendingUp, Briefcase, GamepadIcon, Bot } from "lucide-react";
+import { Home, BookOpen, TrendingUp, Briefcase, GamepadIcon, Bot, Trophy, Award } from "lucide-react";
 
 const Navigation = () => {
   const navItems = [
@@ -8,8 +8,8 @@ const Navigation = () => {
     { to: "/learn", icon: BookOpen, label: "Learn" },
     { to: "/trade", icon: TrendingUp, label: "Trade" },
     { to: "/games", icon: GamepadIcon, label: "Games" },
-    { to: "/ai-chat", icon: Bot, label: "AI Chat" },
-    { to: "/portfolio", icon: Briefcase, label: "Portfolio" },
+    { to: "/leaderboard", icon: Trophy, label: "Leaders" },
+    { to: "/achievements", icon: Award, label: "Badges" },
   ];
 
   return (
