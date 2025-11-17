@@ -12,32 +12,32 @@ import Games from "./pages/Games";
 import TradingGames from "./pages/TradingGames";
 import StockNews from "./pages/StockNews";
 import AIChat from "./pages/AIChat";
-import LoginPage from "./components/LoginPage";
-import { AuthProvider, useAuth } from "./components/AuthProvider";
+import Auth from "./pages/Auth";
+import Leaderboard from "./pages/Leaderboard";
+import Achievements from "./pages/Achievements";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { GameProvider } from "./contexts/GameContext";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { user, loading } = useAuth();
   
   if (loading) {
-    return <div className="h-screen w-screen flex items-center justify-center">Loading KiddieTrade...</div>;
+    return <div className="h-screen w-screen flex items-center justify-center">Loading...</div>;
   }
   
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+  if (!user) {
+    return <Navigate to="/auth" replace />;
   }
   
   return <>{children}</>;
 };
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth();
-  
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/auth" element={<Auth />} />
       <Route path="/" element={
         <ProtectedRoute>
           <Home />
@@ -83,6 +83,16 @@ const AppRoutes = () => {
           <AIChat />
         </ProtectedRoute>
       } />
+      <Route path="/leaderboard" element={
+        <ProtectedRoute>
+          <Leaderboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/achievements" element={
+        <ProtectedRoute>
+          <Achievements />
+        </ProtectedRoute>
+      } />
       <Route path="/parents" element={
         <ProtectedRoute>
           <Parents />
@@ -103,7 +113,7 @@ const App = () => {
     <Router>
       <AuthProvider>
         <GameProvider>
-          <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-background">Loading KiddieTrade...</div>}>
+          <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-background">Loading...</div>}>
             <AppRoutes />
             <Toaster />
           </Suspense>
