@@ -6,21 +6,28 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingUp, Shield } from 'lucide-react';
-
 const Auth = () => {
-  const { signIn, signUp } = useAuth();
+  const {
+    signIn,
+    signUp
+  } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-
-  const [signInData, setSignInData] = useState({ email: '', password: '' });
-  const [signUpData, setSignUpData] = useState({ email: '', password: '', username: '', confirmPassword: '' });
-
+  const [signInData, setSignInData] = useState({
+    email: '',
+    password: ''
+  });
+  const [signUpData, setSignUpData] = useState({
+    email: '',
+    password: '',
+    username: '',
+    confirmPassword: ''
+  });
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     await signIn(signInData.email, signInData.password);
     setIsLoading(false);
   };
-
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (signUpData.password !== signUpData.confirmPassword) {
@@ -31,9 +38,7 @@ const Auth = () => {
     await signUp(signUpData.email, signUpData.password, signUpData.username);
     setIsLoading(false);
   };
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 p-4">
+  return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
@@ -61,27 +66,19 @@ const Auth = () => {
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-email">Email</Label>
-                    <Input
-                      id="signin-email"
-                      type="email"
-                      placeholder="your@email.com"
-                      value={signInData.email}
-                      onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
-                      required
-                    />
+                    <Input id="signin-email" type="email" placeholder="your@email.com" value={signInData.email} onChange={e => setSignInData({
+                    ...signInData,
+                    email: e.target.value
+                  })} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signin-password">Password</Label>
-                    <Input
-                      id="signin-password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={signInData.password}
-                      onChange={(e) => setSignInData({ ...signInData, password: e.target.value })}
-                      required
-                    />
+                    <Input id="signin-password" type="password" placeholder="••••••••" value={signInData.password} onChange={e => setSignInData({
+                    ...signInData,
+                    password: e.target.value
+                  })} required />
                   </div>
-                  <Button type="submit" className="w-full text-foreground" disabled={isLoading}>
+                  <Button type="submit" disabled={isLoading} className="w-full text-primary-foreground">
                     {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
@@ -91,47 +88,31 @@ const Auth = () => {
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-username">Username</Label>
-                    <Input
-                      id="signup-username"
-                      type="text"
-                      placeholder="Choose a username"
-                      value={signUpData.username}
-                      onChange={(e) => setSignUpData({ ...signUpData, username: e.target.value })}
-                      required
-                    />
+                    <Input id="signup-username" type="text" placeholder="Choose a username" value={signUpData.username} onChange={e => setSignUpData({
+                    ...signUpData,
+                    username: e.target.value
+                  })} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
-                    <Input
-                      id="signup-email"
-                      type="email"
-                      placeholder="your@email.com"
-                      value={signUpData.email}
-                      onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
-                      required
-                    />
+                    <Input id="signup-email" type="email" placeholder="your@email.com" value={signUpData.email} onChange={e => setSignUpData({
+                    ...signUpData,
+                    email: e.target.value
+                  })} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
-                    <Input
-                      id="signup-password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={signUpData.password}
-                      onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
-                      required
-                    />
+                    <Input id="signup-password" type="password" placeholder="••••••••" value={signUpData.password} onChange={e => setSignUpData({
+                    ...signUpData,
+                    password: e.target.value
+                  })} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-confirm">Confirm Password</Label>
-                    <Input
-                      id="signup-confirm"
-                      type="password"
-                      placeholder="••••••••"
-                      value={signUpData.confirmPassword}
-                      onChange={(e) => setSignUpData({ ...signUpData, confirmPassword: e.target.value })}
-                      required
-                    />
+                    <Input id="signup-confirm" type="password" placeholder="••••••••" value={signUpData.confirmPassword} onChange={e => setSignUpData({
+                    ...signUpData,
+                    confirmPassword: e.target.value
+                  })} required />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? 'Creating account...' : 'Sign Up'}
@@ -147,8 +128,6 @@ const Auth = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Auth;
