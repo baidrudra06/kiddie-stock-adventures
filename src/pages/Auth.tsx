@@ -78,7 +78,7 @@ const Auth = () => {
                     password: e.target.value
                   })} required />
                   </div>
-                  <Button type="submit" disabled={isLoading} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90 text-black">
                     {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
